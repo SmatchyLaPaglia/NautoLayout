@@ -12,7 +12,7 @@ import UIKit
 extension UIView {
   // A convenience func for removing all subviews.
   func removeAllSubviews() {
-    subviews.map({ $0.removeFromSuperview() })
+    subviews.forEach({ $0.removeFromSuperview() })
   }
   
   // A convenience init for making rects that default to origins of 0, 0
@@ -35,7 +35,7 @@ extension UIView {
     }
     //find that less total height of given views
     var viewsHeight: CGFloat = 0
-    views.map({ viewsHeight += $0.frame.height })
+    views.forEach({ viewsHeight += $0.frame.height })
     let availablePadding = operativeHeight - viewsHeight
     //find amount to put between each view
     let spaceBetween = availablePadding / CGFloat(views.count + 1)
@@ -78,7 +78,7 @@ extension UIView {
     }
     //find that less total width of given views
     var viewsHeight: CGFloat = 0
-    views.map({ viewsHeight += $0.frame.width })
+    views.forEach({ viewsHeight += $0.frame.width })
     let availablePadding = operativeWidth - viewsHeight
     //find amount to put between each view
     let spaceBetween = availablePadding / CGFloat(views.count + 1)
