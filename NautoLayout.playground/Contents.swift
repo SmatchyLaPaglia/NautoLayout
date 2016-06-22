@@ -38,7 +38,14 @@ extension UIView {
     views.forEach({ viewsHeight += $0.frame.height })
     let availablePadding = operativeHeight - viewsHeight
     //find amount to put between each view
-    let spaceBetween = availablePadding / CGFloat(views.count + 1)
+    let spaceBetween: CGFloat
+    let spacesNeeded: Int
+    if let _ = margin {
+      spacesNeeded = views.count - 1
+    } else {
+      spacesNeeded = views.count + 1
+    }
+    spaceBetween = availablePadding / CGFloat(spacesNeeded)
     //set a starting y
     var currentY: CGFloat = spaceBetween
     if let margin = margin {
@@ -61,7 +68,7 @@ extension UIView {
     let calculatedX = self.frame.width * proportion
     self.layoutVerticallyAtX(calculatedX, views: views, margin: margin)
   }
-  func layoutVerticallyAtCenter(views:[UIView],  margin: CGFloat? = nil) {
+  func layoutVerticallyAtCenterX(views:[UIView],  margin: CGFloat? = nil) {
     /* lays out given views at center of self */
     layoutVerticallyAtProportionalX(0.5, views: views, margin: margin)
   }
@@ -81,7 +88,14 @@ extension UIView {
     views.forEach({ viewsHeight += $0.frame.width })
     let availablePadding = operativeWidth - viewsHeight
     //find amount to put between each view
-    let spaceBetween = availablePadding / CGFloat(views.count + 1)
+    let spaceBetween: CGFloat
+    let spacesNeeded: Int
+    if let _ = margin {
+      spacesNeeded = views.count - 1
+    } else {
+      spacesNeeded = views.count + 1
+    }
+    spaceBetween = availablePadding / CGFloat(spacesNeeded)
     //set a starting x
     var currentX: CGFloat = spaceBetween
     if let margin = margin {
@@ -104,7 +118,7 @@ extension UIView {
     let calculatedY = self.frame.height * proportion
     self.layoutHorizontallyAtY(calculatedY, views: views, margin: margin)
   }
-  func layoutHorizontallyAtCenter(views:[UIView], margin: CGFloat? = nil) {
+  func layoutHorizontallyAtCenterY(views:[UIView], margin: CGFloat? = nil) {
     layoutHorizontallyAtProportionalY(0.5, views: views, margin: margin)
   }
   
@@ -139,13 +153,13 @@ SUPERVIEW.layoutVerticallyAtX(60, views: rectViews)
 //: Can also layout using a value between 0 and 1 to calculate a proportional x value.
 SUPERVIEW.layoutVerticallyAtProportionalX(0.8, views: rectViews)
 //: A convenience method allows automatically laying out views at center x.
-SUPERVIEW.layoutVerticallyAtCenter(rectViews)
+SUPERVIEW.layoutVerticallyAtCenterX(rectViews)
 //: The same can be done horizontally, at any y value of superview.
 SUPERVIEW.layoutHorizontallyAtY(330, views: rectViews)
 //: Can also layout using a value between 0 and 1 to calculate a proportional y value.
 SUPERVIEW.layoutHorizontallyAtProportionalY(0.2, views: rectViews)
 //: And again, a convenience method allows automatic vertical centering.
-SUPERVIEW.layoutHorizontallyAtCenter(rectViews)
+SUPERVIEW.layoutHorizontallyAtCenterY(rectViews)
 //: You can place views as proportions of their superview, using values between 0 and 1.
 SUPERVIEW.removeAllSubviews()
 let rectView = UIView(size: RECTANGLE)
@@ -153,5 +167,11 @@ SUPERVIEW.setOriginProportionallyForSubview(rectView, x: 0.1, y: 0.1)
 //: And you can modify a single axis proportionally too.
 SUPERVIEW.setOriginProportionallyForSubview(rectView, x: 0.6)
 SUPERVIEW.setOriginProportionallyForSubview(rectView, y: 0.8)
-
+//: In either axis you can specify a desired margin, and the subviews will space themselves evenly across the leftover space.
+SUPERVIEW.removeAllSubviews()
+SUPERVIEW.layoutVerticallyAtCenterX(rectViews, margin: 70)
+//: Via the same functionality you can specify a margin of 0 to make the views hug the edges of the superview.
+SUPERVIEW.layoutVerticallyAtCenterX(rectViews, margin: 0)
+//: Setting large enough margins will make the views overlap.
+SUPERVIEW.layoutHorizontallyAtCenterY(rectViews, margin: 70)
 //: That's it! It's primitive, but it can do a lot of what the StackView can do, and it will never confound you until you're pulling your hair out and screaming with rage. And that's worth something in this fallen world!
